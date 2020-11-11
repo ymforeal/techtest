@@ -1,0 +1,8 @@
+from php:7.3-fpm
+
+RUN apt-get update && apt-get install -y git unzip
+
+WORKDIR /code
+
+RUN curl -sS https://getcomposer.org/installer | php -- \
+--install-dir=/usr/bin --filename=composer && chmod +x /usr/bin/composer

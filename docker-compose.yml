@@ -1,0 +1,9 @@
+version: "3.5"
+
+services:
+  php:
+    container_name: test_src
+    build: ./php
+    restart: always
+    volumes:
+      - ./src:/code
