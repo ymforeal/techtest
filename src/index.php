@@ -3,6 +3,7 @@
 require_once __DIR__ . '/vendor/autoload.php';
 
 use App\Parser\Csv\DeviceMapCsvParser;
+use App\MapElement\Relation;
 
 if (!isset($argv[1])) {
 
@@ -12,12 +13,13 @@ if (!isset($argv[1])) {
 
 try {
 	$deviceMapParser = new DeviceMapCsvParser($argv[1]);
-
 	$graph = $deviceMapParser->read();
-	var_dump($graph->getContent());
+	
 } catch(\Exception $ex) {
 	echo "Error: ".(string)$ex."\n";
 }
+
+$relation = new Relation($graph);
 
 while( true )
 {
@@ -27,5 +29,9 @@ while( true )
 		exit();
 	}
 
-
+	try {
+		$relation->validation(explode(' ', $search));
+	} catch(\Exception $ex) {
+		echo "Error: ".(string)$ex."\n";
+	}
 }

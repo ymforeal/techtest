@@ -19,7 +19,23 @@ class Graph
 		return $this->content;
 	}
 
-	public function addContent(string $base, string $to, string $latency, bool $is_base)
+	/**
+	 * Add element to graph
+	 * structure sample:
+	 * {
+	 *     A : {
+	 *         B: 10, C: 20
+	 *     }, B: {
+	 *         C: 5, E: 50
+	 *     }
+	 * }
+	 */
+	public function addContent(
+		string $base, 
+		string $to, 
+		string $latency, 
+		bool $is_base
+	)
 	{
 		if ($is_base) {
 			$this->content[$base] = [
