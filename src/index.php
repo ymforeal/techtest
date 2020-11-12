@@ -30,7 +30,12 @@ while( true )
 	}
 
 	try {
-		$relation->validation(explode(' ', $search));
+		$task = $relation->validation(explode(' ', $search));
+
+		$response = $relation->best_first_search($task);
+
+		echo $response."\n";
+
 	} catch(\Exception $ex) {
 		echo "Error: ".(string)$ex."\n";
 	}

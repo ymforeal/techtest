@@ -4,6 +4,8 @@ namespace App\MapElement;
 
 
 use App\MapElement\Exceptions\InvalidCsvContentException;
+
+use App\MapElement\Device;
 /**
  * 
  */
@@ -20,36 +22,17 @@ class Graph
 	}
 
 	/**
-	 * Add element to graph
-	 * structure sample:
-	 * {
-	 *     A : {
-	 *         B: 10, C: 20
-	 *     }, B: {
-	 *         C: 5, E: 50
-	 *     }
-	 * }
+	 * Add neighbour to devices
 	 */
 	public function addContent(
 		string $base, 
 		string $to, 
-		string $latency, 
-		bool $is_base
+		string $latency
 	)
 	{
-		if ($is_base) {
-			$this->content[$base] = [
-				$to => $latency
-			];
-		} else
-		{
-			$this->content[$base][$to] = $latency;
-		}
-	}
-
-	protected function hasContentBase(string $base)
-	{
-		return isset($this->content[$base]);
+		$baseObj = $this->findOrCreateDevice($base);
+		$toObj = $this->findOrCreateDevice($to);
+		$baseObj->addNeighbour($toObj, $latency);
 	}
 
 	public function getDevice()
@@ -67,22 +50,30 @@ class Graph
 		$this->devices[] = $device;
 	}
 
+	public function findOrCreateDevice(string $device)
+	{
+		foreach ($this->content as $obj) {
+			if ($obj->getDevice() == $device) {
+				return $obj;
+			}
+		}
+		$newObj = new Device($device);
+		$this->content[] = $newObj;
+		return $newObj;
+	}
+
 	public function buildGraph(array $relation)
 	{
 		if (count($relation) != 3) {
 			throw new InvalidCsvContentException(implode(",", $relation));
 		}
-		if (!$this->hasContentBase($relation[0])) {
-			$is_base = true;
-		} else {
-			$is_base = false;
-		}
+		
 		// building graph
 		$this->addContent(
 				$relation[0], // from device
 				$relation[1], // to device
-				$relation[2],  // latency
-				$is_base
+				$relation[2]  // latency
+				// $is_base
 			);
 		// building devices collection for quick validation
 		if (!$this->hasDevice($relation[0])) {
