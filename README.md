@@ -1,5 +1,7 @@
 # techtest
 
+## Thank you for review
+
 This project implements Best First Search Algorithm to find the first best path from one device to another within certain latency.
 Articles about Best First Search can be accessed at https://www.geeksforgeeks.org/best-first-search-informed-search/.
 Sorry for the implementation not ideal, can be improved in pattern design with more time.
