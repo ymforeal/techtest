@@ -4,13 +4,18 @@
 
 This project implements Best First Search Algorithm to find the first best path from one device to another within certain latency.
 Articles about Best First Search can be accessed at https://www.geeksforgeeks.org/best-first-search-informed-search/.
-Sorry for the implementation not ideal, can be improved in pattern design with more time.
+Sorry for the implementation not ideal, can be improved in pattern design and unit test coverage with more time.
 
 ## Project Setup
 
 Setup with local environment
 ```
 $ composer install
+```
+
+Run integration test against program
+```
+./vendor/bin/phpunit tests/
 ```
 
 Run the program from local environment, at root dir
@@ -39,5 +44,6 @@ $ docker exec -it test_src composer install
 ```
 Run the program with docker containers and sample files
 ```
+docker exec -it test_src ./vendor/bin/phpunit tests/
 docker exec -it test_src php index.php ./map.csv
 ```
