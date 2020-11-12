@@ -13,14 +13,14 @@ Setup with local environment
 $ composer install
 ```
 
-Run integration test against program
-```
-./vendor/bin/phpunit tests/
-```
-
-Run the program from local environment, at root dir
+Run integration test against program, at root dir
 ```
 $ cd src
+$ ./vendor/bin/phpunit tests/
+```
+
+Run the program from local environment, at src dir
+```
 $ php index.php [PATH TO CSV FILE]
 ```
 Sample
@@ -44,6 +44,6 @@ $ docker exec -it test_src composer install
 ```
 Run the program with docker containers and sample files
 ```
-docker exec -it test_src ./vendor/bin/phpunit tests/
-docker exec -it test_src php index.php ./map.csv
+$ docker exec -it test_src ./vendor/bin/phpunit tests/
+$ docker exec -it test_src php index.php ./map.csv
 ```
