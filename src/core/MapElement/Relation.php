@@ -53,8 +53,8 @@ class Relation
 		$priority_queue[$fromDevice->getDevice()] = [
 			"latency" => 0,
 			"obj" => $fromDevice,
-			"path" => $fromDevice->getDevice(),
-			"visited" => [$fromDevice->getDevice()]
+			"visited" => [$fromDevice->getDevice()],
+			"level" => 0
 		];
 		// skip when visited device attemps
 		// back to the queue
@@ -73,10 +73,10 @@ class Relation
 			$cost = $current[array_key_first($current)]["latency"];
 			
 			if (
-				array_key_first($current) == $search[1] &&
+				preg_match("/".$search[1]."$/", array_key_first($current)) &&
 				$cost <= $search[2]
 			) {
-				return $current[array_key_first($current)]["path"]."=>".$cost;
+				return array_key_first($current)."=>".$cost;
 			}
 
 			$neighbours = $current[array_key_first($current)]["obj"]->getNeighbours();
@@ -88,11 +88,11 @@ class Relation
 						
 						$visited = array_merge($current[array_key_first($current)]["visited"], (array)$obj->getDevice());
 						
-						$priority_queue[$obj->getDevice()] = [
+						$priority_queue[array_key_first($current)."=>".$obj->getDevice()] = [
 							"latency" => $cost + $latency,
 							"obj" => $obj,
-							"path" => $current[array_key_first($current)]["path"]."=>".$obj->getDevice(),
-							"visited" => $visited
+							"visited" => $visited,
+							"level" => $current[array_key_first($current)]["level"] + 1
 						];
 					}
 
@@ -108,13 +108,14 @@ class Relation
 	private function get_element_with_lowest_latency(array $priority_queue) : string
 	{
 		$selected = array_key_first($priority_queue);
-		$lowest_latency = $priority_queue[$selected]["latency"];
+		$lowest_level = $priority_queue[$selected]["level"];
 		foreach ($priority_queue as $device => $stack) {
-			if ($stack["latency"] < $latency) {
+			if ($stack["level"] < $lowest_level) {
 				$selected = $device;
-				$lowest_latency = $stack["latency"];
+				$lowest_level = $stack["level"];
 			}
 		}
+
 		return $selected;
 	}
 
